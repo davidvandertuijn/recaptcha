@@ -17,12 +17,15 @@ use Davidvandertuijn\Recaptcha;
 ```
 
 **Register your site**
+
 <a href="https://www.google.com/recaptcha/admin#list">reCAPTCHA: Easy on Humans, Hard on Bots</a>
 
-*Add script -tag*
+**Add script -tag**
+
 ```<script src="//www.google.com/recaptcha/api.js"></script>```
 
 **Add div -tag within ```<form>``` ... ```</form>```**
+
 ```<div class="g-recaptcha" data-sitekey="your-sitekey-here"></div>```
 
 **Verify**
