@@ -78,7 +78,7 @@ class Recaptcha
     public function verify()
     {
         $aPostfields = [
-            'secret' => $this->getSecret(),
+            'secret'   => $this->getSecret(),
             'response' => $this->getResponse(),
             'remoteip' => $this->getRemoteIp() == '::1' ? '127.0.0.1' : $this->getRemoteIp(),
         ];
