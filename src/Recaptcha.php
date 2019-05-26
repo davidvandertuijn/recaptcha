@@ -10,17 +10,17 @@ class Recaptcha
     const SITE_VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
     /**
-     * @var string $sRemoteIp
+     * @var string
      */
     protected $sRemoteIp = '';
 
     /**
-     * @var string $sResponse
+     * @var string
      */
     protected $sResponse = '';
 
     /**
-     * @var string $sSecret
+     * @var string
      */
     protected $sSecret = '';
 
