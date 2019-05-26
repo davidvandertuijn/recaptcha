@@ -4,18 +4,32 @@ namespace Davidvandertuijn;
 
 class Recaptcha
 {
+    /**
+     * @see https://developers.google.com/recaptcha/docs/verify
+     */
     const SITE_VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
-    protected $sRemoteIp;
-    protected $sResponse;
-    protected $sSecret;
+    /**
+     * @var string $sRemoteIp
+     */
+    protected $sRemoteIp = '';
+
+    /**
+     * @var string $sResponse
+     */
+    protected $sResponse = '';
+
+    /**
+     * @var string $sSecret
+     */
+    protected $sSecret = '';
 
     /**
      * Get Remote Ip.
      *
      * @return string $this->sResponse
      */
-    public function getRemoteIp()
+    public function getRemoteIp(): string
     {
         return $this->sRemoteIp;
     }
@@ -25,7 +39,7 @@ class Recaptcha
      *
      * @param string $sRemoteIp
      */
-    public function setRemoteIp($sRemoteIp)
+    public function setRemoteIp(string $sRemoteIp)
     {
         $this->sRemoteIp = $sRemoteIp;
     }
@@ -35,7 +49,7 @@ class Recaptcha
      *
      * @return string $this->sResponse
      */
-    public function getResponse()
+    public function getResponse(): string
     {
         return $this->sResponse;
     }
@@ -45,7 +59,7 @@ class Recaptcha
      *
      * @param string $sSecret
      */
-    public function setResponse($sResponse)
+    public function setResponse(string $sResponse)
     {
         $this->sResponse = $sResponse;
     }
@@ -55,7 +69,7 @@ class Recaptcha
      *
      * @return string $this->sSecret
      */
-    public function getSecret()
+    public function getSecret(): string
     {
         return $this->sSecret;
     }
@@ -65,7 +79,7 @@ class Recaptcha
      *
      * @param string $sSecret
      */
-    public function setSecret($sSecret)
+    public function setSecret(string $sSecret)
     {
         $this->sSecret = $sSecret;
     }
@@ -75,7 +89,7 @@ class Recaptcha
      *
      * @return string
      */
-    public function verify()
+    public function verify(): string
     {
         $aPostfields = [
             'secret'   => $this->getSecret(),
