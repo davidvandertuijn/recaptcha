@@ -3,7 +3,6 @@
 <a href="https://packagist.org/packages/davidvandertuijn/recaptcha"><img src="https://poser.pugx.org/davidvandertuijn/recaptcha/d/total.svg" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/davidvandertuijn/recaptcha"><img src="https://poser.pugx.org/davidvandertuijn/recaptcha/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/davidvandertuijn/recaptcha"><img src="https://poser.pugx.org/davidvandertuijn/recaptcha/license.svg" alt="License"></a>
-<img src="https://github.styleci.io/repos/93674686/shield?style=flat" alt="StyleCI">
 
 ## Install
 
@@ -33,13 +32,13 @@ use Davidvandertuijn\Recaptcha;
 
 ```php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $oRecaptcha = new Recaptcha;
+    $recaptcha = new Recaptcha;
 
-    $oRecaptcha->setSecret('your-secret-key-here');
-    $oRecaptcha->setResponse($_POST['g-recaptcha-response']);
-    $oRecaptcha->setRemoteIp($_SERVER['REMOTE_ADDR']);
+    $recaptcha->setSecret('your-secret-key-here');
+    $recaptcha->setResponse($_POST['g-recaptcha-response']);
+    $recaptcha->setRemoteIp($_SERVER['REMOTE_ADDR']);
 
-    if (!$oRecaptcha->verify()) {
+    if (!$recaptcha->verify()) {
         // false
     } else {
         // true

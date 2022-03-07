@@ -2,117 +2,204 @@
 
 namespace Davidvandertuijn;
 
+use Davidvandertuijn\Recaptcha\Exceptions\EmptySecretException;
+
+/**
+ * reCAPTCHA.
+ * @see https://developers.google.com/recaptcha/docs/verify
+ */
 class Recaptcha
 {
     /**
-     * @see https://developers.google.com/recaptcha/docs/verify
+     * @const string
      */
-    const SITE_VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
+    const URL = 'https://www.google.com/recaptcha/api/siteverify';
+
+    /**
+     * @var mixed
+     */
+    public $ch;
 
     /**
      * @var string
      */
-    protected $sRemoteIp = '';
+    protected $remoteIp = '';
 
     /**
      * @var string
      */
-    protected $sResponse = '';
+    protected $response = '';
 
     /**
      * @var string
      */
-    protected $sSecret = '';
+    protected $secret = '';
+
+    /**
+     * Get Curl Handle.
+     *
+     * @return mixed
+     */
+    public function getCh()
+    {
+        return $this->ch;
+    }
+
+    /**
+     * Set Curl Handle.
+     *
+     * @param mixed $ch
+     */
+    public function setCh($ch)
+    {
+        $this->ch = $ch;
+    }
 
     /**
      * Get Remote Ip.
      *
-     * @return string $this->sResponse
+     * @return string $this->response
      */
     public function getRemoteIp(): string
     {
-        return $this->sRemoteIp;
+        return $this->remoteIp;
     }
 
     /**
      * Set Remote Ip.
      *
-     * @param string $sRemoteIp
+     * @param string $remoteIp
      */
-    public function setRemoteIp(string $sRemoteIp)
+    public function setRemoteIp(string $remoteIp)
     {
-        $this->sRemoteIp = $sRemoteIp;
+        $this->remoteIp = $remoteIp;
     }
 
     /**
      * Get Response.
      *
-     * @return string $this->sResponse
+     * @return string $this->response
      */
     public function getResponse(): string
     {
-        return $this->sResponse;
+        return $this->response;
     }
 
     /**
      * Set Response.
      *
-     * @param string $sSecret
+     * @param string $secret
      */
-    public function setResponse(string $sResponse)
+    public function setResponse(string $response)
     {
-        $this->sResponse = $sResponse;
+        $this->response = $response;
     }
 
     /**
      * Get Secret.
      *
-     * @return string $this->sSecret
+     * @return string $this->secret
      */
     public function getSecret(): string
     {
-        return $this->sSecret;
+        return $this->secret;
     }
 
     /**
      * Set Secret.
      *
-     * @param string $sSecret
+     * @param string $secret
      */
-    public function setSecret(string $sSecret)
+    public function setSecret(string $secret)
     {
-        $this->sSecret = $sSecret;
+        $this->secret = $secret;
+    }
+
+    /**
+     * Before.
+     *
+     * @throws \Davidvandertuijn\Recaptcha\Exceptions\EmptySecretException
+     */
+    public function before()
+    {
+        // Check Secret.
+        $this->checkSecret();
+    }
+
+    /**
+     * Check Secret.
+     *
+     * @throws \Davidvandertuijn\Recaptcha\Exceptions\EmptySecretException
+     */
+    public function checkSecret()
+    {
+        if (empty($this->getSecret())) {
+            throw new EmptySecretException();
+        }
+    }
+
+    /**
+     * cURL Setopt.
+     */
+    public function curlSetopt()
+    {
+        curl_setopt($this->getCh(), CURLOPT_URL, self::URL);
+        curl_setopt($this->getCh(), CURLOPT_POST, true);
+        curl_setopt($this->getCh(), CURLOPT_POSTFIELDS, $this->postfields());
+        curl_setopt($this->getCh(), CURLINFO_HEADER_OUT, false);
+        curl_setopt($this->getCh(), CURLOPT_HEADER, false);
+        curl_setopt($this->getCh(), CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->getCh(), CURLOPT_SSL_VERIFYPEER, true);
+    }
+
+    /**
+     * Postfields.
+     *
+     * @return array
+     */
+    public function postfields(): array
+    {
+        return [
+            'secret' => $this->getSecret(),
+            'response' => $this->getResponse(),
+            'remoteip' => $this->getRemoteIp() == '::1' ? '127.0.0.1' : $this->getRemoteIp(),
+        ];
+    }
+
+    /**
+     * Success.
+     *
+     * @return bool
+     */
+    public function success(): bool
+    {
+        // Decodes a JSON string.
+        $response = json_decode($this->getResponse());
+
+        // Success.
+        return (bool) $response->success;
     }
 
     /**
      * Verify.
      *
-     * @return string
+     * @return bool
      */
-    public function verify(): string
+    public function verify(): bool
     {
-        $aPostfields = [
-            'secret'   => $this->getSecret(),
-            'response' => $this->getResponse(),
-            'remoteip' => $this->getRemoteIp() == '::1' ? '127.0.0.1' : $this->getRemoteIp(),
-        ];
+        // Before
+        $this->before();
 
-        $ch = curl_init();
+        // Initialize a cURL session.
+        $this->setCh(curl_init());
 
-        curl_setopt($ch, CURLOPT_URL, self::SITE_VERIFY_URL);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $aPostfields);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, false);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        // Sets multiple options for a cURL session.
+        $this->curlSetopt();
 
-        $sResponse = curl_exec($ch);
+        // Perform a cURL session.
+        $this->setResponse(curl_exec($this->getCh()));
 
-        curl_close($ch);
-
-        $oResponse = json_decode($sResponse);
-
-        return $oResponse->success;
+        // Success.
+        return $this->success();
     }
 }
