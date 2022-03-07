@@ -187,7 +187,7 @@ class Recaptcha
      */
     public function verify(): bool
     {
-        // Before
+        // Before.
         $this->before();
 
         // Initialize a cURL session.
