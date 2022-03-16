@@ -4,6 +4,8 @@
 <a href="https://packagist.org/packages/davidvandertuijn/recaptcha"><img src="https://poser.pugx.org/davidvandertuijn/recaptcha/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/davidvandertuijn/recaptcha"><img src="https://poser.pugx.org/davidvandertuijn/recaptcha/license.svg" alt="License"></a>
 
+![reCAPTCHA](https://cdn.davidvandertuijn.nl/github/recaptcha.png)
+
 ## Install
 
 ```
