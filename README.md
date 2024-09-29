@@ -6,6 +6,10 @@
 
 ![reCAPTCHA](https://cdn.davidvandertuijn.nl/github/recaptcha.png)
 
+reCAPTCHA is an advanced security tool designed to protect websites from automated bots and malicious activities. By implementing reCAPTCHA, website owners can ensure that their online platforms remain secure while providing a user-friendly experience for legitimate users.
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/davidvandertuijn)
+
 ## Install
 
 ```
